@@ -1,4 +1,6 @@
-const API_BASE_URL = 'http://localhost/city_sneakers';
+const SUPABASE_URL = 'https://tusyxrkyuvmaiofvditd.supabase.co';
+const SUPABASE_KEY = 'TA_CLE_ANON_PUBLIQUE'; // Mets ta vraie clé ici
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Catalogue local (fallback) chargé depuis products.json + liste courante affichée
 let localItems = [];
@@ -23,31 +25,24 @@ function buildLocalItemsFromCatalogJson(catalogJson) {
 }
 
 async function chargerCatalogueLocal() {
-  // Si la page est ouverte en file://, le fetch de products.json échoue souvent.
-  if (location.protocol === "file:") {
-    console.warn("Ouvre le site via un serveur local pour charger products.json (ex: Live Server).");
-    localItems = [];
-    allItems = [];
+  const { data, error } = await _supabase.from('produits').select('*');
+
+  if (error) {
+    console.error("Erreur Supabase:", error);
     return;
   }
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4000);
-  try {
-    const res = await fetch("products.json", { signal: controller.signal, cache: "no-store" });
-    if (!res.ok) throw new Error(`products.json HTTP ${res.status}`);
-    const json = await res.json();
-    localItems = buildLocalItemsFromCatalogJson(json);
-    allItems = localItems.slice();
-  } catch (e) {
-    console.error("Impossible de charger products.json :", e);
-    localItems = [];
-    allItems = [];
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
+  // On transforme les données Supabase pour qu'elles s'adaptent à TON code original
+  allItems = data.map(p => ({
+    id: p.identifiant,
+    name: p.nom,
+    price: p.prix,
+    img: p.image,
+    cat: p.categorie
+  }));
 
+  renderGrid(allItems); // Appelle ta fonction d'affichage originale
+}
 /* Panier : tableau d'objets { id, name, price, img, sz, qty } */
 let cart = [];
 
