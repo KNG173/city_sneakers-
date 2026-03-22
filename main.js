@@ -475,4 +475,4 @@ function closeSuccessPage() {
   const success = document.getElementById('successPage');
   if (success) success.style.display = 'none';
 }
-
+document.addEventListener('DOMContentLoaded', chargerCatalogueLocal);
