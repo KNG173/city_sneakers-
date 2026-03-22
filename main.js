@@ -1,16 +1,8 @@
-// ==========================================
-// 1. CONFIGURATION SUPABASE
-// ==========================================
-const SUPABASE_URL = 'https://tusyxrkyuvmaiofvditd.supabase.co';
-const SUPABASE_KEY = 'ewyRSD YU Y IIYQDRVV '; // ⚠️ EFFACE CE TEXTE ET COLLE TA CLÉ API PUBLIQUE ICI
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const API_BASE_URL = 'http://localhost/city_sneakers';
 
-// ==========================================
-// 2. VARIABLES GLOBALES
-// ==========================================
+// Catalogue local (fallback) chargé depuis products.json + liste courante affichée
+let localItems = [];
 let allItems = [];
-let cart = JSON.parse(localStorage.getItem('city_sneakers_cart')) || [];
-
 
 function buildLocalItemsFromCatalogJson(catalogJson) {
   if (!catalogJson || typeof catalogJson !== "object") throw new Error("products.json invalide");
@@ -31,24 +23,14 @@ function buildLocalItemsFromCatalogJson(catalogJson) {
 }
 
 async function chargerCatalogueLocal() {
-  const { data, error } = await _supabase.from('produits').select('*');
-
-  if (error) {
-    console.error("Erreur Supabase:", error);
+  // Si la page est ouverte en file://, le fetch de products.json échoue souvent.
+  if (location.protocol === "file:") {
+    console.warn("Ouvre le site via un serveur local pour charger products.json (ex: Live Server).");
+    localItems = [];
+    allItems = [];
     return;
   }
 
-  // On transforme les données Supabase pour qu'elles s'adaptent à TON code original
-  allItems = data.map(p => ({
-    id: p.identifiant,
-    name: p.nom,
-    price: p.prix,
-    img: p.image,
-    cat: p.categorie
-  }));
-
-  renderGrid(allItems); // Appelle ta fonction d'affichage originale
-}
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 4000);
   try {
@@ -497,5 +479,4 @@ function closeSuccessPage() {
   const success = document.getElementById('successPage');
   if (success) success.style.display = 'none';
 }
-
 
