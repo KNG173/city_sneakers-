@@ -1,10 +1,15 @@
 <!DOCTYPE html>
+<!-- ============================================================
+     CITY SNEAKERS KIN - Version finale avec commentaires
+     Panier (quantités), livraison Kinshasa, paiement RDC, section Confiance
+     ============================================================ -->
 <html lang="fr">
 <head>
+    <!-- Encodage et affichage mobile -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CITY SNEAKERS KIN | Premium Store</title>
-    
+    <!-- Polices Google + icônes Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -13,114 +18,152 @@
 </head>
 <body>
 
+    <!-- ========== PRELOADER (masqué après 2,5 s) ========== -->
     <div id="preloader">
         <img src="logo x.png" class="loader-logo-img" alt="CITY SNEAKERS">
         <div class="loader-bar"></div>
     </div>
 
+    <!-- ========== EN-TÊTE : logo, recherche, thème clair/sombre, icône panier ========== -->
     <header>
-        <div class="logo">CITY SNEAKERS</div>
-        <div class="header-right">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Rechercher..." id="searchInput">
-            </div>
-            <div class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
-                <i class="fas fa-moon" id="themeIcon"></i>
-            </div>
-            <div class="cart-icon" onclick="toggleCart(true)">
-                <i class="fas fa-shopping-bag"></i>
-                <div class="num-badge" id="cartCount">0</div>
-            </div>
+        <div class="logo">CITY <span>SNEAKERS</span></div>
+        <div class="search-container"><i class="fas fa-search"></i><input type="text" class="search-input" id="searchInp" placeholder="Rechercher..." onkeyup="doSearch()"></div>
+        <div class="header-actions">
+            <div class="theme-toggle" onclick="toggleTheme()"><i id="theme-icon" class="fas fa-moon"></i></div>
+            <div onclick="toggleCart(true)" style="position:relative; cursor:pointer;"><i class="fas fa-shopping-bag" style="color:var(--accent)"></i><div class="num-badge" id="b-top">0</div></div>
         </div>
     </header>
 
-    <nav class="categories">
-        <button class="cat-btn active" onclick="filterItems('all')">Tous</button>
-        <button class="cat-btn" onclick="filterItems('jordan')">Jordan</button>
-        <button class="cat-btn" onclick="filterItems('nike')">Nike</button>
-        <button class="cat-btn" onclick="filterItems('adidas')">Adidas</button>
-        <button class="cat-btn" onclick="filterItems('new-balance')">New Balance</button>
-    </nav>
+    <!-- Barre de statut d'opération -->
+    <div id="statusBanner" class="status info">Bienvenue chez City Sneakers Kin !</div>
 
-    <main class="product-grid" id="productGrid">
-        </main>
+    <!-- Hero : images remplies par JS (renderHero) -->
+    <div class="hero" id="hero"></div>
+    <h2 class="section-title"><span>New Collection</span>Exclusivités Kin</h2>
 
-    <div class="cart-overlay" id="cartOverlay">
-        <div class="cart-panel">
-            <div class="cart-header">
-                <h2>Mon Panier</h2>
-                <i class="fas fa-times" onclick="toggleCart(false)"></i>
+    <!-- Filtres par catégorie : appelle filter('clé', this) -->
+    <div class="filter-nav">
+        <button class="f-btn active" onclick="filter('all', this)">Tous</button>
+        <button class="f-btn" onclick="filter('soulier', this)">Mokoto</button>
+        <button class="f-btn" onclick="filter('jordan', this)">Jordan</button>
+        <button class="f-btn" onclick="filter('nike', this)">Nike</button>
+        <button class="f-btn" onclick="filter('adidas', this)">Adidas</button>
+        <button class="f-btn" onclick="filter('allstar', this)">All Star</button>
+        <button class="f-btn" onclick="filter('sandale', this)">Sandale</button>
+        <button class="f-btn" onclick="filter('babouche', this)">Babouche</button>
+        <button class="f-btn" onclick="filter('sport', this)">Crampons</button>
+    </div>
+
+    <!-- Grille produits : remplie par JS (renderGrid) -->
+    <div class="grid" id="grid"></div>
+
+    <!-- Section marketing : confiance, livraison, clients -->
+    <section class="trust-section">
+        <h2 class="section-title" style="margin-top:0;"><span>Confiance & Service</span>Pourquoi CITY SNEAKERS KIN ?</h2>
+        <div class="trust-grid">
+            <div class="trust-card">
+                <h3 class="trust-title">Qualité vérifiée</h3>
+                <p class="trust-text">Chaque paire est contrôlée avant l'envoi : pointure, finition, couleur. Nous travaillons avec des fournisseurs sérieux pour garantir un produit propre à porter dès réception.</p>
+                <div class="trust-pill"><i class="fas fa-shield-check"></i><span>Produits vérifiés avant livraison</span></div>
             </div>
-            <div id="cartList" class="cart-items-list">
-                </div>
-            <div class="cart-footer">
-                <div class="cart-total-line">
-                    <span>Total :</span>
-                    <span id="cartTotal">0.00</span>$
-                </div>
-                
-                <div class="checkout-form">
-                    <input type="text" id="nomClient" placeholder="Ton nom complet">
-                    <input type="tel" id="phoneClient" placeholder="Numéro WhatsApp (ex: 084...)">
-                    <select id="communeSelect">
-                        <option value="0">Ville (Livraison gratuite)</option>
-                        <option value="5">Gombe / Lingwala (+5$)</option>
-                        <option value="7">Kintambo / Ngaliema (+7$)</option>
-                        <option value="10">Autres communes (+10$)</option>
-                    </select>
-                </div>
-
-                <button class="btn-order" onclick="finaliserCommande()">Commander via WhatsApp</button>
+            <div class="trust-card">
+                <h3 class="trust-title">Livraison rapide à Kin</h3>
+                <p class="trust-text">Nous livrons partout à Kinshasa via nos livreurs partenaires. Vous payez à la livraison ou par mobile money selon ce qui vous arrange le plus.</p>
+                <div class="trust-pill"><i class="fas fa-truck-fast"></i><span>Confirmation par WhatsApp avant départ</span></div>
             </div>
+            <div class="trust-card">
+                <h3 class="trust-title">Clients satisfaits</h3>
+                <p class="trust-text">Plus de 100+ commandes livrées : étudiants, employés, entrepreneurs, tous font confiance à CITY SNEAKERS KIN pour rester stylés sans se compliquer la vie.</p>
+                <div class="trust-pill"><i class="fas fa-star"></i><span>Photos clients disponibles sur demande</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overlay sombre quand le panier est ouvert ; clic = fermer panier -->
+    <div class="overlay" id="overlay" onclick="toggleCart(false)"></div>
+
+    <!-- ========== SIDEBAR PANIER ========== -->
+    <div id="sidebar">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; border-bottom:2px solid var(--accent); padding-bottom:10px;">
+            <h2 style="font-family:'Playfair Display'; color: var(--text);">PANIER</h2>
+            <i class="fas fa-times" onclick="toggleCart(false)" style="cursor:pointer; font-size:1.5rem; color:var(--text);"></i>
+        </div>
+        <!-- Liste des articles : remplie par renderCart() -->
+        <div id="cartItems" style="flex:1; overflow-y:auto;"></div>
+        <!-- Zone livraison + mode paiement + total + bouton WhatsApp -->
+        <div style="padding-top:15px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:15px; font-size:0.75rem; color:var(--text-dim);">
+            <div>
+                <div style="font-weight:700; margin-bottom:6px; color:var(--text); text-transform:uppercase; letter-spacing:1px; font-size:0.7rem;">Zone de livraison</div>
+                <select id="deliveryZone" class="sz-select" onchange="renderCart()">
+                    <option value="0">Choisir commune...</option>
+                    <option value="5">Gombe ($5)</option>
+                    <option value="5">Lingwala ($5)</option>
+                    <option value="5">Barumbu ($5)</option>
+                    <option value="6">Kintambo ($6)</option>
+                    <option value="6">Ngaliema ($6)</option>
+                    <option value="6">Bandalungwa ($6)</option>
+                    <option value="6">Kasavubu ($6)</option>
+                    <option value="6">Selembao ($6)</option>
+                    <option value="7">Limete ($7)</option>
+                    <option value="7">Lemba ($7)</option>
+                    <option value="7">Ngaba ($7)</option>
+                    <option value="7">Kalamu ($7)</option>
+                    <option value="7">Makala ($7)</option>
+                    <option value="7">Kisenso ($7)</option>
+                    <option value="7">Matete ($7)</option>
+                    <option value="8">Masina ($8)</option>
+                    <option value="8">Kimbanseke ($8)</option>
+                    <option value="8">N'djili ($8)</option>
+                    <option value="10">Mont Ngafula ($10)</option>
+                    <option value="10">Nsele ($10)</option>
+                    <option value="10">Maluku ($10)</option>
+                </select>
+            </div>
+            <div>
+                <label for="nom_client" style="display:block; font-weight:700; margin-bottom:6px; color:var(--text); text-transform:uppercase; letter-spacing:1px; font-size:0.7rem;">Votre nom</label>
+                <input id="nom_client" type="text" placeholder="Ex: Claude" style="width:100%; padding:10px; border-radius:4px; border:1px solid var(--border); background:var(--surface); color:var(--text);">
+            </div>
+            <div>
+                <label for="phone_client" style="display:block; font-weight:700; margin-bottom:6px; color:var(--text); text-transform:uppercase; letter-spacing:1px; font-size:0.7rem;">Téléphone</label>
+                <input id="phone_client" type="tel" placeholder="+243 81 234 5678" style="width:100%; padding:10px; border-radius:4px; border:1px solid var(--border); background:var(--surface); color:var(--text);">
+            </div>
+            <div>
+                <div style="font-weight:700; margin-bottom:6px; color:var(--text); text-transform:uppercase; letter-spacing:1px; font-size:0.7rem;">Mode de paiement</div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="radio" name="payment" value="Cash à la livraison" checked><span>Cash à la livraison</span></label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="radio" name="payment" value="M-Pesa (Vodacom)"><span>M‑Pesa (Vodacom)</span></label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="radio" name="payment" value="Airtel Money"><span>Airtel Money</span></label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="radio" name="payment" value="Orange Money"><span>Orange Money</span></label>
+                </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.3rem; margin-top:5px; color: var(--text);"><span>TOTAL</span><span id="total-price" style="color:var(--accent)">$0</span></div>
+            <button onclick="finaliserAchat()" style="width:100%; background:#2d2d2d; color:white; border:none; padding:14px 18px; font-weight:800; cursor:pointer; border-radius:4px;">Finaliser (enregistre + WhatsApp)</button>
+            <button onclick="sendWA()" style="width:100%; background:var(--accent); color:white; border:none; padding:14px 18px; font-weight:800; cursor:pointer; border-radius:4px;">COMMANDER VIA WHATSAPP</button>
         </div>
     </div>
 
-    <div class="modal-overlay" id="productModal">
-        <div class="modal-content">
-            <i class="fas fa-times close-modal" onclick="closeModal()"></i>
-            <div class="modal-body">
-                <div class="modal-img-container">
-                    <img id="modalImg" src="" alt="">
-                </div>
-                <div class="modal-info">
-                    <h2 id="modalTitle">Modèle</h2>
-                    <p class="modal-price" id="modalPrice">0$</p>
-                    <div class="size-section">
-                        <label>Choisir la taille :</label>
-                        <select id="sizeSelect">
-                            <option>38</option>
-                            <option>39</option>
-                            <option>40</option>
-                            <option>41</option>
-                            <option>42</option>
-                            <option>43</option>
-                            <option>44</option>
-                            <option>45</option>
-                        </select>
-                    </div>
-                    <button class="btn-add" onclick="confirmAdd()">Ajouter au panier</button>
-                </div>
-            </div>
-        </div>
+    <!-- Barre du bas : Accueil (scroll haut), Panier, Contact WhatsApp -->
+    <div class="tab-bar">
+        <div class="tab-item" onclick="window.scrollTo({top:0, behavior:'smooth'})"><i class="fas fa-home"></i>Accueil</div>
+        <div class="tab-item" onclick="toggleCart(true)" style="position:relative;"><i class="fas fa-shopping-cart"></i>Panier<div class="num-badge" id="b-bot">0</div></div>
+        <a href="https://wa.me/243848151078" style="text-decoration:none;" class="tab-item"><i class="fab fa-whatsapp"></i>Contact</a>
     </div>
 
-    <footer>
-        <p>&copy; 2026 CITY SNEAKERS KIN | Kinshasa, RDC</p>
+    <!-- Message toast "Produit ajouté !" (affiché/masqué en JS) -->
+    <div id="toast">Produit ajouté !</div>
+
+    <div id="successPage" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center;">
+      <div style="background:#111; color:#fff; border-radius:12px; width:min(95%,420px); padding:20px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.35);">
+        <h2 style="margin-bottom:12px;">✅ Commande reçue !</h2>
+        <p id="successText" style="font-size:0.95rem; color:#ddd; margin-bottom:20px;">Merci, votre commande est en cours de traitement.</p>
+        <button onclick="closeSuccessPage()" style="background:#2d2d2d; color:#fff; border:none; border-radius:8px; padding:10px 15px; cursor:pointer;">Revenir à la boutique</button>
+      </div>
+    </div>
+
+    <script src="main.js" defer></script>
+
+    <footer style="text-align:center; padding:20px; background:var(--surface); color:var(--text-dim); font-size: 0.7rem; border-top: 1px solid var(--border);">
+        <strong>CITY SNEAKERS KIN</strong> — Le luxe à vos pieds.<br>🚚 Livraison partout à Kinshasa.
     </footer>
-
-    <script src="main.js"></script>
-
-    <script>
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('preloader');
-                if (loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => { loader.style.display = 'none'; }, 500);
-                }
-            }, 2000); // L'animation dure 2 secondes
-        });
-    </script>
 </body>
 </html>
