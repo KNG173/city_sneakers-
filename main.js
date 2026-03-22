@@ -2,7 +2,7 @@
 // 1. CONFIGURATION SUPABASE
 // ==========================================
 const SUPABASE_URL = 'https://tusyxrkyuvmaiofvditd.supabase.co';
-const SUPABASE_KEY = 'TON_CODE_ANON_ICI'; // ⚠️ EFFACE CE TEXTE ET COLLE TA CLÉ API PUBLIQUE ICI
+const SUPABASE_KEY = 'ewyRSD YU Y IIYQDRVV '; // ⚠️ EFFACE CE TEXTE ET COLLE TA CLÉ API PUBLIQUE ICI
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ==========================================
@@ -179,7 +179,7 @@ function finaliserCommande() {
   renderCart();
   
   // ⚠️ Remplace les X par ton vrai numéro WhatsApp avec l'indicatif (ex: 243...)
-  window.open(`https://wa.me/243XXXXXXXXX?text=${encodeURIComponent(message)}`, '_blank');
+  window.open(`https://wa.me/243848151078?text=${encodeURIComponent(message)}`, '_blank');
 }
 
 // ==========================================
