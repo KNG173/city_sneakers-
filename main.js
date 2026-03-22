@@ -11,30 +11,6 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let allItems = [];
 let cart = JSON.parse(localStorage.getItem('city_sneakers_cart')) || [];
 
-// ==========================================
-// 3. CHARGEMENT DES PRODUITS (Depuis Supabase)
-// ==========================================
-async function chargerProduits() {
-  const { data, error } = await _supabase
-    .from('produits')
-    .select('*');
-
-  if (error) {
-    console.error("Erreur lors du chargement Supabase:", error);
-    return;
-  }
-
-  // On adapte les colonnes de ton tableau Supabase pour le code
-  allItems = data.map(p => ({
-    id: p.identifiant,
-    name: p.nom,
-    price: p.prix,
-    img: p.image,
-    cat: p.categorie
-  }));
-
-  renderGrid(allItems);
-}
 
 function buildLocalItemsFromCatalogJson(catalogJson) {
   if (!catalogJson || typeof catalogJson !== "object") throw new Error("products.json invalide");
@@ -55,14 +31,24 @@ function buildLocalItemsFromCatalogJson(catalogJson) {
 }
 
 async function chargerCatalogueLocal() {
-  // Si la page est ouverte en file://, le fetch de products.json échoue souvent.
-  if (location.protocol === "file:") {
-    console.warn("Ouvre le site via un serveur local pour charger products.json (ex: Live Server).");
-    localItems = [];
-    allItems = [];
+  const { data, error } = await _supabase.from('produits').select('*');
+
+  if (error) {
+    console.error("Erreur Supabase:", error);
     return;
   }
 
+  // On transforme les données Supabase pour qu'elles s'adaptent à TON code original
+  allItems = data.map(p => ({
+    id: p.identifiant,
+    name: p.nom,
+    price: p.prix,
+    img: p.image,
+    cat: p.categorie
+  }));
+
+  renderGrid(allItems); // Appelle ta fonction d'affichage originale
+}
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 4000);
   try {
