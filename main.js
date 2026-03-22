@@ -1,5 +1,5 @@
 const SUPABASE_URL = 'https://tusyxrkyuvmaiofvditd.supabase.co';
-const SUPABASE_KEY = 'TA_CLE_ANON_PUBLIQUE'; // Mets ta vraie clé ici
+const SUPABASE_KEY = 'ewyRSD YU Y IIYQDRVV'; // Mets ta vraie clé ici
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Catalogue local (fallback) chargé depuis products.json + liste courante affichée
