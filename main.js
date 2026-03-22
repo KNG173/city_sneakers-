@@ -1,5 +1,5 @@
 const SUPABASE_URL = 'https://tusyxrkyuvmaiofvditd.supabase.co';
-const SUPABASE_KEY = 'ewyRSD YU Y IIYQDRVV'; // Mets ta vraie clé ici
+const SUPABASE_KEY = 'sb_publishable_1awKmVzqrxd13y2gbOOu2g_wZLj6hrK'; // Mets ta vraie clé ici   code secret:sb_publishable_1awKmVzqrxd13y2gbOOu2g_wZLj6hrK
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Catalogue local (fallback) chargé depuis products.json + liste courante affichée
@@ -28,20 +28,21 @@ async function chargerCatalogueLocal() {
   const { data, error } = await _supabase.from('produits').select('*');
 
   if (error) {
-    console.error("Erreur Supabase:", error);
+    console.error("Erreur de connexion :", error);
     return;
   }
 
-  // On transforme les données Supabase pour qu'elles s'adaptent à TON code original
+  console.log("Données reçues de Supabase :", data); // Pour vérifier si ça arrive
+
   allItems = data.map(p => ({
     id: p.identifiant,
     name: p.nom,
     price: p.prix,
     img: p.image,
-    cat: p.categorie
+    cat: p.catégorie // AJOUT DE L'ACCENT ICI pour correspondre à ta BDD
   }));
 
-  renderGrid(allItems); // Appelle ta fonction d'affichage originale
+  renderGrid(allItems);
 }
 /* Panier : tableau d'objets { id, name, price, img, sz, qty } */
 let cart = [];
