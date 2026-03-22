@@ -1,5 +1,5 @@
 const SUPABASE_URL = 'https://tusyxrkyuvmaiofvditd.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_1awKmVzqrxd13y2gbOOu2g_wZLj6hrK'; // Mets ta vraie clé ici   code secret:sb_publishable_1awKmVzqrxd13y2gbOOu2g_wZLj6hrK
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1c3l4cmt5dXZtYWlvZnZkaXRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMzA1NTEsImV4cCI6MjA4OTcwNjU1MX0.8zTjmx0dc91lMsq-B8AbFsUKhM0ekNhJs_Jp8Y5jrNU'; // Mets ta vraie clé ici
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Catalogue local (fallback) chargé depuis products.json + liste courante affichée
